@@ -8,8 +8,8 @@
 
 
 
-#define THUMB_WIDTH 160
-#define THUMB_HEIGHT 120
+#define THUMB_WIDTH 360
+#define THUMB_HEIGHT 240
 int motionCounter = 0;
 
 PlaneLB im;
@@ -22,6 +22,8 @@ void setup()
     Serial.begin(115200);
     im.set_m_iLines(320);
     im.set_m_iPixels(240);
+    prevIm.set_m_iLines(32);
+    prevIm.set_m_iPixels(24);
     // turn on high freq for fast streaming speed
     Serial.println("Camera init OK");
     cam.InitCamera(PIXFORMAT_GRAYSCALE);
@@ -34,7 +36,7 @@ void loop()
   cam.TakePhoto();
   byte *buf = cam.GetDataBuffer();
   im.set_m_Data(buf);
-  im.DownSample(2);
+  im.DownSample(THUMB_HEIGHT/RESAMPLED_ROWS);
   
   im.DetectMotion(prevIm, motionDetected);
   if (motionDetected == TRUE)
@@ -42,12 +44,13 @@ void loop()
     PRINTF("MOTION DETECTED-%d\n", motionCounter++);
     //cam.SavePhoto();
     cam.FlashLED(1);
+    delay(1);
+    cam.FlashLED(0);
   }
   else
   {
     cam.FlashLED(0);
   }
-
   cam.ReleasePhoto();
   
   prevIm = im;
