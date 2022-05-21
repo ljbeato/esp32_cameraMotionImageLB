@@ -43,7 +43,6 @@ void CheckForTransmit(unsigned char *ptr, int len)
       comm.TransmitRawBytes(ptr, len);
     }
   } 
-  
 }
 void loop()
 {
@@ -52,9 +51,7 @@ void loop()
   byte *buf = cam.GetDataBuffer();
   im.set_m_Data(buf);
   im.DownSample(CAMERA_HEIGHT/RESAMPLED_ROWS);
-  //for (int i = 0; i < CAMERA_HEIGHT*CAMERA_WIDTH; i++)
-    //buf[i] = (byte)i;
-  CheckForTransmit(buf, CAMERA_HEIGHT*CAMERA_WIDTH);
+  
   im.DetectMotion(prevIm, motionDetected);
   if (motionDetected == TRUE)
   {

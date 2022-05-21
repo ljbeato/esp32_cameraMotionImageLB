@@ -10,7 +10,7 @@
 % On MacOS:     serialPort = '/dev/tty.KeySerial1';
 % On Windows:   serialPort = "\\\\.\\COM5";
 %
-%To run: 
+%To run:
 %plot_cams()
 %To reset ports: (if MATLAB still thinks they're busy)
 %delete(instrfindall)
@@ -25,9 +25,9 @@ else
     disp("Serial: Unsupported")
 endif
 # Opens serial port ttyUSB1 with baudrate of 115200 (config defaults to 8-N-1)
-s1 = serial("\\\\.\\COM34", 115200) 
+s1 = serial("\\\\.\\COM3", 115200)
 # Flush input and output buffers
-srl_flush(s1); 
+srl_flush(s1);
 set(s1, "baudrate", 115200) # Change baudrate
 set(s1, "bytesize", 8)    # Change byte size (config becomes 5-N-1)
 set(s1, "parity", "N")    # Changes parity checking (config becomes 5-E-1),
@@ -37,7 +37,7 @@ set(s1, "stopbits", 1)    # Changes stop bits (config becomes 5-E-2), possible
 
 set(s1, "dataterminalready", "off")  # Enables DTR line
 set(s1, "requesttosend", "off")      # Enables RTS line
-                                    # possible values "on", "off". 
+                                    # possible values "on", "off".
 %Send over bluetooth or serial
 %serialPort = '\\\\.\\COM5';
 %serialObject = serial(serialPort);
@@ -56,8 +56,8 @@ finishup = onCleanup(@() myCleanupFun(s1));
 count = 1;
 row = 1;
 column=1;
-imHeight = 480
-imWidth = 640
+imHeight = 240
+imWidth = 320
 im = zeros (imHeight, imWidth);
 state = 0;
 
@@ -74,13 +74,13 @@ state = 0;
 
          val = srl_read(s1, 1);
          %val
-         im(row, column) = val;         
-      % 
-      endfor        
-    endfor 
+         im(row, column) = val;
+      %
+      endfor
+    endfor
     fprintf ("DONE\n");
     f = imshow(im, [0,255]);
-    drawnow;        
+    drawnow;
 
   end % while(1)
 
